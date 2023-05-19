@@ -40,14 +40,14 @@ export class Api {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: data.name,
+        name: data.username,
         about: data.job,
       }),
     }).then(this._checkResponse);
   }
 
   //PATCH-запрос на сервер для смены аватара
-  updateUserAvatar(avatar) {
+  updateUserAvatar(link) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
@@ -55,7 +55,7 @@ export class Api {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        avatar: avatar.link,
+        avatar: link.avatar,
       }),
     }).then(this._checkResponse);
   }
@@ -76,8 +76,8 @@ export class Api {
   }
 
   //DELETE-запрос на сервер для удаления карточки
-  deleteCard(_id) {
-    return fetch(`${this._baseUrl}/cards/${_id}`, {
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: {
         authorization: this._token,
@@ -85,20 +85,9 @@ export class Api {
     }).then(this._checkResponse);
   }
 
-  //PUT-запрос на сервер для добавления лайка
-  addLike(_id) {
-    return fetch(`${this._baseUrl}/cards/likes/${_id}`, {
-      method: 'PUT',
-      headers: {
-        authorization: this._token,
-      },
-    }).then(this._checkResponse);
-  }
-
-  //DELETE-запрос на сервер для удаления лайка
-  removeLike(_id) {
-    return fetch(`${this._baseUrl}/cards/likes/${_id}`, {
-      method: 'DELETE',
+  changeLikeCardStatus(cardId, isLiked) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes/`, {
+      method: `${!isLiked ? 'DELETE' : 'PUT'}`,
       headers: {
         authorization: this._token,
       },

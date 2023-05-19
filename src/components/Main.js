@@ -1,42 +1,27 @@
-import { useState, useEffect } from 'react';
-import api from '../utils/Api';
+import React from 'react';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-  const [userName, setUserName] = useState(null);
-  const [userDescription, setUserDescription] = useState(null);
-  const [userAvatar, setUserAvatar] = useState(null);
-  const [cards, setCards] = useState([]);
-
-  useEffect((data) => {
-    api
-      .getUserProfile(data)
-      .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((err) => {
-        console.log(`Error:${err}`);
-      });
-  }, []);
-
-  useEffect((obj) => {
-    api
-      .getInitialCards(obj)
-      .then((obj) => {
-        setCards(obj);
-      })
-      .catch((err) => {
-        console.log(`Error:${err}`);
-      });
-  }, []);
+function Main({
+  cards,
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  onCardLike,
+  onDeletePopupClick,
+}) {
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main className="content">
       <section className="profile">
         <div className="profile__info">
-          <img className="profile__avatar" src={userAvatar} alt="Ваше фото" />
+          <img
+            className="profile__avatar"
+            src={currentUser.avatar}
+            alt="Ваше фото"
+          />
           <button
             type="button"
             aria-label="Сменить аватар"
@@ -45,7 +30,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
           ></button>
           <div className="profile__info-card">
             <div className="profile__info-text">
-              <h1 className="profile__info-title">{userName}</h1>
+              <h1 className="profile__info-title">{currentUser.name}</h1>
               <button
                 type="button"
                 aria-label="Редактировать"
@@ -53,7 +38,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
                 onClick={onEditProfile}
               ></button>
             </div>
-            <p className="profile__info-subtitle">{userDescription}</p>
+            <p className="profile__info-subtitle">{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -68,9 +53,10 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
           return (
             <Card
               key={card._id}
-              id={card._id}
               card={card}
               onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onDeletePopupClick={onDeletePopupClick}
             />
           );
         })}
