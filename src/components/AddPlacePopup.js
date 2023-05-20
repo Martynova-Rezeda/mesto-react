@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, onLoading }) {
@@ -14,32 +14,39 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, onLoading }) {
     setPicture(e.target.value);
   }
 
-  function handleSubmit(e) {
+  useEffect(() => {
+    setTitle('');
+    setPicture('');
+  }, [isOpen]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     onAddPlace({
       name: title,
       link: picture,
     });
-  }
+  };
 
   return (
     <PopupWithForm
       title="Новое место"
       name="add-form"
-      named="Создать"
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      buttonText="Создать"
+      onLoading={onLoading}
     >
       <label className="popup__chapter">
         <input
           id="cardname-input"
           className="popup__field popup__field_type_cardname"
-          name="name"
+          name="title"
           type="text"
           placeholder="Название"
           required
           onChange={handleChangeTitle}
+          value={title || ''}
         />
         <span className="cardname-input-error popup__input-error"></span>
       </label>
@@ -47,16 +54,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, onLoading }) {
         <input
           id="link-input"
           className="popup__field popup__field_type_picturelink"
-          name="link"
+          name="image"
           type="url"
           placeholder="Ссылка на картинку"
           required
           onChange={handleChangePicture}
+          value={picture || ''}
         />
         <span className="link-input-error popup__input-error"></span>
-        <button className="popup__button-save" type="submit">
-          {onLoading ? 'Создание...' : 'Создать'}
-        </button>
       </label>
     </PopupWithForm>
   );

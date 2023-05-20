@@ -37,6 +37,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, onLoading }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      buttonText="Сохранить"
+      onLoading={onLoading}
     >
       <label className="popup__chapter">
         <input
@@ -63,9 +65,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, onLoading }) {
           required
         />
         <span className="job-input-error popup__input-error"></span>
-        <button className="popup__button-save" type="submit">
-          {onLoading ? 'Сохранение...' : 'Сохранить'}
-        </button>
       </label>
     </PopupWithForm>
   );

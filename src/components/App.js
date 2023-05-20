@@ -17,7 +17,7 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isImagePopup, setImagePopup] = useState(false);
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState({ name: '', link: '' });
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
-    setSelectedCard({});
+    setSelectedCard({ name: '', link: '' });
     setDeletePopupOpen(false);
     setImagePopup(false);
   };
@@ -130,7 +130,6 @@ function App() {
     api
       .updateUserAvatar(data)
       .then((obj) => {
-        console.log(obj);
         setCurrentUser(obj);
         closeAllPopups();
       })
@@ -173,12 +172,11 @@ function App() {
         />
         <Footer />
         <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
           onLoading={isLoading}
+          isOpen={isEditProfilePopupOpen}
+          onUpdateUser={handleUpdateUser}
         />
-
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
